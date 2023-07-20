@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PressCore.DBContext;
 
@@ -10,9 +11,11 @@ using PressCore.DBContext;
 namespace PressCore.Migrations
 {
     [DbContext(typeof(PressContext))]
-    partial class PressContextModelSnapshot : ModelSnapshot
+    [Migration("20230720114947_desc")]
+    partial class desc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

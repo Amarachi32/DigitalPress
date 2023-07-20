@@ -1,12 +1,17 @@
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Writers;
 using PressCore;
+using PressCore.DBContext;
+using PressCore.Interfaces;
+using PressInfrastructure.Data;
 using PressInfrastructure.Extension;
 
 namespace DigitalPress
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +23,8 @@ namespace DigitalPress
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDatabaseConnection();
+            builder.Services.RegisterService();
+            //builder.Services.AddScoped<IProductRepository, ProductRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,7 +41,21 @@ namespace DigitalPress
 
             app.MapControllers();
 
-            app.Run();
+            using  var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<PressContext>();
+            var logger = services.GetRequiredService<ILogger<Program>>();
+
+            try
+            {
+                await context.Database.MigrateAsync();
+                await PressContextSeed.SeedAsync(context);
+            }catch (Exception ex) {
+                logger.LogError(ex, "an error occur during migration");
+            
+            }
+
+            await app.RunAsync();
         }
     }
 }
