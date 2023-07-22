@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using PressCore.Interfaces;
 using PressInfrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PressInfrastructure.Errors;
 
 namespace PressInfrastructure.Extension
 {
@@ -19,6 +16,23 @@ namespace PressInfrastructure.Extension
             //services.AddTransient<IUnitOfWork, UnitOfWork<HmoDbContext>>();
             //services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                    {
+                        var errors = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .SelectMany(e => e.Value.Errors)
+                        .Select(x => x.ErrorMessage).ToArray();
+
+                        var errorResponse = new ApiValidationErrorResponse
+                        {
+                            Errors = errors,
+                        };
+                        return new BadRequestObjectResult(errorResponse);
+                    };
+
+            });
         }
     }
 }

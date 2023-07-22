@@ -8,6 +8,7 @@ using PressCore.Interfaces;
 using PressCore.Specification;
 using PressInfrastructure.Data;
 using PressInfrastructure.DTO.ResponseDto;
+using PressInfrastructure.Errors;
 
 namespace DigitalPress.Controllers
 {
@@ -24,6 +25,7 @@ namespace DigitalPress.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        //[ProducesResponseType]
         public async Task<ActionResult<IReadOnlyList<ProductReturnDto>>> GetProducts()
         {
             var detailProduct = new ProductWithTypesAndBrandSpecification();
@@ -43,10 +45,13 @@ namespace DigitalPress.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductReturnDto>> GetProduct(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ProductReturnDto>> GetProduct(string id)
         {
             var detailProduct = new ProductWithTypesAndBrandSpecification();
              var product = await _repo.GetEntityWithSpec(detailProduct);
+            if (product == null) return NotFound(new ApiResponse(404));
             return _mapper.Map<Product, ProductReturnDto>(product);
 /*            return new ProductReturnDto
             {

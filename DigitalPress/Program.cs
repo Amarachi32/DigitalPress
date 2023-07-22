@@ -1,4 +1,5 @@
 
+using DigitalPress.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
 using PressCore;
@@ -24,9 +25,10 @@ namespace DigitalPress
             builder.Services.AddSwaggerGen();
             builder.Services.AddDatabaseConnection();
             builder.Services.RegisterService();
-            //builder.Services.AddScoped<IProductRepository, ProductRepository>();
+         
             var app = builder.Build();
-
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseStatusCodePagesWithReExecute("errors/{0}");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
