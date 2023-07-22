@@ -42,6 +42,11 @@ namespace PressInfrastructure.Data
             return product;
         }
 
+        public Task<Product> GetProductByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
         {
             return await _context.ProductTypes.ToListAsync();

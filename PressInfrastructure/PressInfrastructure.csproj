@@ -10,4 +10,12 @@
     <ProjectReference Include="..\PressCore\PressCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\RequestDto\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
 </Project>

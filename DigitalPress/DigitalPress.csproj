@@ -19,4 +19,8 @@
     <ProjectReference Include="..\PressInfrastructure\PressInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
