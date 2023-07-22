@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PressCore.Interfaces;
 using PressInfrastructure.Data;
 using System;
@@ -14,9 +15,10 @@ namespace PressInfrastructure.Extension
         public static void RegisterService(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped(typeof(IPressRepository<>), typeof(PressRepository<>));
             //services.AddTransient<IUnitOfWork, UnitOfWork<HmoDbContext>>();
             //services.AddTransient<IAuthenticationService, AuthenticationService>();
-
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }

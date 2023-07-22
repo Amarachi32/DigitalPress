@@ -36,6 +36,7 @@ namespace DigitalPress
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
             app.UseAuthorization();
 
 
