@@ -16,6 +16,7 @@ namespace PressInfrastructure.Extension
             //services.AddTransient<IUnitOfWork, UnitOfWork<HmoDbContext>>();
             //services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+           
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

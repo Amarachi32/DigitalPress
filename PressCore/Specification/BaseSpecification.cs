@@ -29,9 +29,24 @@ namespace PressCore.Specification
         public List<Expression<Func<T, object>>> Includes { get; } = 
             new List<Expression<Func<T, object>>> { };
 
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
+
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
+        }
+
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpressions)
+        {
+
+            OrderBy = orderByExpressions;
+        }
+
+        protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpressions)
+        {
+           OrderByDescending = orderByDescExpressions;
         }
     }
 }

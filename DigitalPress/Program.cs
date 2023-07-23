@@ -25,7 +25,13 @@ namespace DigitalPress
             builder.Services.AddSwaggerGen();
             builder.Services.AddDatabaseConnection();
             builder.Services.RegisterService();
-         
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
             var app = builder.Build();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseStatusCodePagesWithReExecute("errors/{0}");
@@ -39,6 +45,7 @@ namespace DigitalPress
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
 

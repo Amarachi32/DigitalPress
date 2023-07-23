@@ -9,6 +9,7 @@ using PressCore.Specification;
 using PressInfrastructure.Data;
 using PressInfrastructure.DTO.ResponseDto;
 using PressInfrastructure.Errors;
+using PressInfrastructure.Helper;
 
 namespace DigitalPress.Controllers
 {
@@ -26,11 +27,15 @@ namespace DigitalPress.Controllers
         }
         [HttpGet]
         //[ProducesResponseType]
-        public async Task<ActionResult<IReadOnlyList<ProductReturnDto>>> GetProducts()
+        public async Task<ActionResult<Pagination<ProductReturnDto>>> GetProducts([FromQuery] ProductSpecParam productParams)
         {
-            var detailProduct = new ProductWithTypesAndBrandSpecification();
+            var detailProduct = new ProductWithTypesAndBrandSpecification(productParams);
+            var countSpec = new ProductWithFilterForCountSpecification(productParams);
+            var totalItems = await _repo.CountAsync(detailProduct);
             var products = await _repo.ListAsync(detailProduct);
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductReturnDto>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductReturnDto>>(products);
+            return Ok(new Pagination<ProductReturnDto>(productParams.PageIndex,
+                productParams.PageSize, totalItems, data));
 
             /*return products.Select(product =>  new ProductReturnDto
             {
